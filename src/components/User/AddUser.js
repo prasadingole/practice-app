@@ -2,18 +2,28 @@ import styles from './AddUser.module.css'
 import Card from '../UI/Card';
 import Button from '../UI/Button'
 import { useState } from 'react';
+import ErrorModal from '../UI/ErrorModal';
 const AddUser = (props) => {
     const [enteredUserName,setEnteredUserName] = useState("");
     const [enteredUserAge,setEnteredUserAge] = useState("");
+    const [error,setError]= useState(undefined);
 
     const addUserHandler = (event) => {
         event.preventDefault();
         
         if(enteredUserName.trim().length === 0 || enteredUserAge.trim().length === 0){
-          return; 
+            setError({
+                title:"Invalid Input",
+                message : "User name can not be blank"
+            });
+            return; 
         }
 
         if(+enteredUserAge < 1) {
+            setError({
+                title:"Invalid Input",
+                message : "User age can not be less than 0 years"
+            });
           return;
         }
         
@@ -31,7 +41,15 @@ const AddUser = (props) => {
         setEnteredUserAge(event.target.value);
     }
 
+    const errorResetHandler = () =>{
+        setError(undefined);
+        setEnteredUserName("");
+        setEnteredUserAge("");
+    }
+
     return (
+        <div>
+        {error && <ErrorModal title={error.title} message={error.message} onReset={errorResetHandler}></ErrorModal>}
         <Card className={styles.input}>
         <form  onSubmit={addUserHandler}>
             <label htmlFor="username">User Name</label>
@@ -41,6 +59,7 @@ const AddUser = (props) => {
             <Button type="submit">Add User</Button>
         </form>
         </Card>
+        </div>
     );
 }
 
