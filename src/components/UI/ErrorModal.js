@@ -1,24 +1,31 @@
 import Card from "./Card";
 import Button from "./Button"
 import styles from "./ErrorModal.module.css"
+import React from "react";
+import ReactDOM  from "react-dom";
+
+const Backdrop = (props) => {
+    return <div className={styles.backdrop} onClick={props.onClick}></div>
+};
+
+const ModalOverlay = (props) => {
+    return (<Card className={styles.modal}>
+        <header className={styles.header}>
+            <h2>{props.title}</h2>
+        </header>
+        <div className={styles.content}><p>{props.message}</p></div>
+        <footer className={styles.actions}>
+            <Button onClick={props.onClick}>Ok</Button>
+        </footer>
+    </Card>);
+};
+
 const ErrorModal = (props) => {
-    const buttonClickHandler = () => {
-        props.onReset();
-    }
     return (
-        <div>
-            <div className={styles.backdrop}>
-                <Card className={styles.modal}>
-                    <header className={styles.header}>
-                        <h2>{props.title}</h2>
-                    </header>
-                    <div className={styles.content}><p>{props.message}</p></div>
-                    <footer className={styles.actions}>
-                        <Button onClick={buttonClickHandler}>Ok</Button>
-                    </footer>
-                </Card>
-            </div>
-        </div>
+        <React.Fragment>
+            {ReactDOM.createPortal(<Backdrop onClick={props.onReset}/>,document.getElementById("backdrop-root"))}
+            {ReactDOM.createPortal(<ModalOverlay title={props.title} message={props.message} onClick={props.onReset}/>,document.getElementById("overlay-root"))}
+       </React.Fragment>
     )
 
 }

@@ -1,7 +1,7 @@
 import styles from './AddUser.module.css'
 import Card from '../UI/Card';
 import Button from '../UI/Button'
-import { useState } from 'react';
+import React, { useState } from 'react';
 import ErrorModal from '../UI/ErrorModal';
 const AddUser = (props) => {
     const [enteredUserName,setEnteredUserName] = useState("");
@@ -14,7 +14,7 @@ const AddUser = (props) => {
         if(enteredUserName.trim().length === 0 || enteredUserAge.trim().length === 0){
             setError({
                 title:"Invalid Input",
-                message : "User name can not be blank"
+                message : "User name/age can not be blank"
             });
             return; 
         }
@@ -48,7 +48,7 @@ const AddUser = (props) => {
     }
 
     return (
-        <div>
+        <React.Fragment>
         {error && <ErrorModal title={error.title} message={error.message} onReset={errorResetHandler}></ErrorModal>}
         <Card className={styles.input}>
         <form  onSubmit={addUserHandler}>
@@ -59,7 +59,7 @@ const AddUser = (props) => {
             <Button type="submit">Add User</Button>
         </form>
         </Card>
-        </div>
+        </React.Fragment>
     );
 }
 
